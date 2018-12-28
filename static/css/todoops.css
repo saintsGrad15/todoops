@@ -1,0 +1,34 @@
+body
+{
+    all: initial;
+}
+
+#header
+{
+    top: 0;
+    padding: 10px 5px;
+
+    background-color: white;
+
+    border-bottom: solid 1px black;
+}
+
+#content
+{
+    height: 100%;
+}
+
+#footer
+{
+    bottom: 0;
+    padding: 10px 5px;
+
+    background-color: white;
+
+    border-top: solid 1px black;
+}
+
+.position_sticky
+{
+    position: sticky;
+}
