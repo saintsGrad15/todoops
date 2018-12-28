@@ -1,12 +1,26 @@
+html, #mainContent
+{
+    height: 100%;
+}
+
 body
 {
     all: initial;
 }
 
+#mainContent
+{
+    display: grid;
+
+    grid-template-rows: max-content 1fr max-content;
+}
+
 #header
 {
+    grid-row: 1;
+
     top: 0;
-    padding: 10px 5px;
+    padding: 10px;
 
     background-color: white;
 
@@ -15,13 +29,19 @@ body
 
 #content
 {
+    grid-row: 2;
+
     height: 100%;
+
+    padding: 10px;
 }
 
 #footer
 {
+    grid-row: 3;
+
     bottom: 0;
-    padding: 10px 5px;
+    padding: 10px;
 
     background-color: white;
 

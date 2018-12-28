@@ -6,7 +6,11 @@ application = Flask(__name__)
 
 @application.route("/")
 def home():
-    return render_template("todoops.html")
+    with open("./VERSION", "r") as fp:
+        version = fp.read().strip()
+
+        return render_template("todoops.html",
+                               version=version)
 
 
 def main():
