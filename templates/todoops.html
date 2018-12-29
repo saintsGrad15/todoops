@@ -2,24 +2,105 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Modular Javascript</title>
+	<title>Todoops!</title>
 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
-	<script type="module" src="static/js/home.js"></script>
+	<script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
+	<script type="module" src="/static/js/todoops.js"></script>
 
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/regular.css" integrity="sha384-aubIA90W7NxJ+Ly4QHAqo1JBSwQ0jejV75iHhj59KRwVjLVHjuhS3LkDAoa/ltO4" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-jLuaxTTBR42U2qJ/pm4JRouHkEDHkVqH0T1nyQXn1mZ7Snycpf6Rl25VBNthU4z0" crossorigin="anonymous">
+	<!--<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">-->
+	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
 	<link rel="stylesheet" href="static/css/todoops.css">
+	<link rel="stylesheet" href="static/css/util.css">
+
+	{% if version %}
+		<script> const VERSION = "{{ version }}";</script>
+	{% else %}}
+		<script> const VERSION = "";</script>
+	{% endif %}
 </head>
 <body>
-	<div id="mainContent">
+	<div id="mainApp">
 		<div id="header" class="position_sticky">
-			Header
+			<router-link class="headerAnchor dontUnderline" to="/">Todoops.com</router-link>
+			<router-link class="headerAnchor dontUnderline" to="/newTodoop">Todoops</router-link>
+			<!--<router-link class="headerAnchor dontUnderline" to="/">Todoops Lists</router-link>-->
 		</div>
-		<div id="content">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis libero nisl, suscipit sed convallis sed, lobortis eu tortor. Maecenas iaculis volutpat placerat. Aenean porta dolor vitae felis scelerisque dignissim. Donec scelerisque, mauris vel congue fermentum, nisi urna aliquet odio, id laoreet nulla risus non ipsum. Aliquam erat volutpat. Fusce tellus leo, euismod faucibus purus ac, cursus mattis ligula. Morbi quis dapibus ligula, tempus sagittis tortor. Suspendisse vitae orci sed felis interdum gravida. Vestibulum ut tempus dui. Nulla aliquet ante nec quam vehicula placerat.
-		</div>
+		<router-view id="currentView"></router-view>
 		<div id="footer" class="position_sticky">
-			Todoops v{{ version }} | © 2018 John Carrell
+			Todoops {% if version %} v{{ version }} {% endif %}| © 2018 John Carrell
 		</div>
 	</div>
 </body>
+
+<template id="homeView">
+	<div class="baseView">
+		HOME
+	</div>
+</template>
+
+<template id="newTodoopViewTemplate">
+	<div>
+		<div id="newTodoopView" class="baseView">
+			<input
+					id="newTodoopNameInput"
+
+					type="text"
+					class="newTodoopNameInput invisibleInput"
+					placeholder="New Todoop"
+					autofocus
+
+					v-model="name">
+
+			<todoop-category v-for="(category, index) in categories"
+							 :name.sync="category.name"
+							 :items.sync="category.items"
+							 :key="index"
+			>
+			</todoop-category>
+
+			<input class="invisibleInput" placeholder="+ Category">
+		</div>
+	</div>
+</template>
+
+<template id="todoopCategory">
+	<div>
+		<form class="todoopCategoryForm pure-form">
+			<div>
+				<button class="contentOnlyButton"><i class="fas fa-grip-vertical"></i></button>
+				<button class="contentOnlyButton button-error"><i class="far fa-trash-alt"></i></button>
+			</div>
+
+			<input :value="name"
+				   @input="updateName($event.target.value)"
+				   class="invisibleInput"
+				   placeholder="Can't be empty...">
+		</form>
+		<form class="todoopItemForm pure-form">
+			<div>
+				<input v-for="(item, index) in items"
+					   type="text"
+					   :value="item"
+					   :index="index"
+					   @input="updateItem(index, $event.target)"
+					   class="todoopItemForm invisibleInput">
+
+				<input class="todoopItemForm invisibleInput"
+					   @input="addNewItem($event.target)"
+					   placeholder="+ Item">
+			</div>
+		</form>
+	</div>
+</template>
+
+<template id="notFoundView">
+	<div class="baseView">
+		NOT FOUND
+	</div>
+</template>
 </html>

@@ -1,0 +1,78 @@
+.headerAnchor
+{
+    display: inline-block;
+    margin-left: -4px;
+    padding: 15px 20px;
+    border-right: solid 1px black;
+
+    color:black;
+}
+
+.headerAnchor:nth-child(3n+1)
+{
+    background-color: #bfffbf;
+}
+
+.headerAnchor:nth-child(3n+2)
+{
+    background-color: #fff4bf;
+}
+
+.headerAnchor:nth-child(3n+3)
+{
+    background-color: #bfe3ff;
+}
+
+.position_sticky
+{
+    position: sticky;
+}
+
+.dontUnderline
+{
+    text-decoration: none;
+}
+
+.textAlignCenter
+{
+    text-align: center;
+}
+
+.invisibleInput
+{
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.invisibleInput:focus
+{
+    outline: none;
+}
+
+.invisibleElement
+{
+    visibility: hidden;
+}
+
+.contentOnlyButton
+{
+    background: transparent;
+    border: none;
+    padding: unset;
+}
+
+.button-error
+{
+    color: rgb(202, 60, 60);
+}
+
+.contentOnlyButton:focus
+{
+    outline: none;
+}
+
+.button-error:active
+{
+    background-color: rgb(202, 60, 60);
+    color: white;
+}
