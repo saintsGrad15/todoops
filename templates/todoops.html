@@ -7,15 +7,17 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
 	<script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script>
-	<script type="module" src="/static/js/todoops.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.17.0/vuedraggable.min.js"></script>
+	<script type="module" src="/static/js/todoops.js?v={{ cache_buster }}"></script>
 
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/regular.css" integrity="sha384-aubIA90W7NxJ+Ly4QHAqo1JBSwQ0jejV75iHhj59KRwVjLVHjuhS3LkDAoa/ltO4" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-jLuaxTTBR42U2qJ/pm4JRouHkEDHkVqH0T1nyQXn1mZ7Snycpf6Rl25VBNthU4z0" crossorigin="anonymous">
 	<!--<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/base-min.css">-->
 	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
-	<link rel="stylesheet" href="static/css/todoops.css">
-	<link rel="stylesheet" href="static/css/util.css">
+	<link rel="stylesheet" href="static/css/todoops.css?v={{ cache_buster }}">
+	<link rel="stylesheet" href="static/css/util.css?v={{ cache_buster }}">
 
 	{% if version %}
 		<script> const VERSION = "{{ version }}";</script>
@@ -28,7 +30,7 @@
 		<div id="header" class="position_sticky">
 			<router-link class="headerAnchor dontUnderline" to="/">Todoops.com</router-link>
 			<router-link class="headerAnchor dontUnderline" to="/newTodoop">Todoops</router-link>
-			<!--<router-link class="headerAnchor dontUnderline" to="/">Todoops Lists</router-link>-->
+			<router-link class="headerAnchor dontUnderline" to="/">Todoops Lists</router-link>
 		</div>
 		<router-view id="currentView"></router-view>
 		<div id="footer" class="position_sticky">
@@ -45,7 +47,7 @@
 
 <template id="newTodoopViewTemplate">
 	<div>
-		<div id="newTodoopView" class="baseView">
+		<div id="newTodoopView" class="baseView" :class="{dragging: $root.dragging}">
 			<input
 					id="newTodoopNameInput"
 
@@ -54,14 +56,16 @@
 					placeholder="New Todoop"
 					autofocus
 
-					v-model="name">
+					v-model="todoop.name">
 
-			<todoop-category v-for="(category, index) in categories"
-							 :name.sync="category.name"
-							 :items.sync="category.items"
-							 :key="index"
-			>
-			</todoop-category>
+			<draggable v-model="todoop.categories" :options="categoryDraggableOptions">
+				<todoop-category v-for="(category, index) in todoop.categories"
+								 :name.sync="category.name"
+								 :items.sync="category.items"
+								 :key="index"
+				>
+				</todoop-category>
+			</draggable>
 
 			<input class="invisibleInput" placeholder="+ Category">
 		</div>
@@ -69,10 +73,10 @@
 </template>
 
 <template id="todoopCategory">
-	<div>
-		<form class="todoopCategoryForm pure-form">
+	<div class="categoryWrapper">
+		<form class="buttonGroupInputGrid pure-form">
 			<div>
-				<button class="contentOnlyButton"><i class="fas fa-grip-vertical"></i></button>
+				<span class="categoryDragHandle contentOnlyButton"><i class="fas fa-grip-vertical"></i></span>
 				<button class="contentOnlyButton button-error"><i class="far fa-trash-alt"></i></button>
 			</div>
 
@@ -82,15 +86,22 @@
 				   placeholder="Can't be empty...">
 		</form>
 		<form class="todoopItemForm pure-form">
+			<draggable class="itemsFormDraggable" v-model="itemsClone" :options="itemDraggableOptions">
+				<div class="buttonGroupInputGrid" v-for="(item, index) in itemsClone">
+					<div>
+						<button class="contentOnlyButton"><i class="fas fa-grip-vertical"></i></button>
+						<button class="contentOnlyButton button-error" @click="deleteItem(index)"><i class="far fa-trash-alt"></i></button>
+					</div>
+					<input
+						   type="text"
+						   :value="item"
+						   :index="index"
+						   @input="updateItem(index, $event.target)"
+						   class="todoopItemForm invisibleInput">
+				</div>
+			</draggable>
 			<div>
-				<input v-for="(item, index) in items"
-					   type="text"
-					   :value="item"
-					   :index="index"
-					   @input="updateItem(index, $event.target)"
-					   class="todoopItemForm invisibleInput">
-
-				<input class="todoopItemForm invisibleInput"
+				<input class="newItemInput todoopItemForm invisibleInput"
 					   @input="addNewItem($event.target)"
 					   placeholder="+ Item">
 			</div>

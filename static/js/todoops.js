@@ -31,6 +31,9 @@ import todoopCategory from "./functionalComponents/todoopCategory.js";
     new Vue({
         el: "#mainApp",
         name: "Main App",
+        data: {
+            dragging: false
+        },
         router
     });
 })();

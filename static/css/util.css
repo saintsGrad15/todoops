@@ -1,3 +1,10 @@
+:root
+{
+    --todoops-light-blue: #80a6ff;
+    --todoops-medium-blue: #4079ff;
+    --todoops-dark-blue: #004dff;
+}
+
 .headerAnchor
 {
     display: inline-block;
@@ -8,19 +15,15 @@
     color:black;
 }
 
-.headerAnchor:nth-child(3n+1)
+.headerAnchor:nth-child(2n+1)
 {
-    background-color: #bfffbf;
+    background-color: var(--todoops-dark-blue);
+    color: white;
 }
 
-.headerAnchor:nth-child(3n+2)
+.headerAnchor:nth-child(2n+2)
 {
-    background-color: #fff4bf;
-}
-
-.headerAnchor:nth-child(3n+3)
-{
-    background-color: #bfe3ff;
+    background-color: var(--todoops-light-blue);
 }
 
 .position_sticky
@@ -61,18 +64,53 @@
     padding: unset;
 }
 
-.button-error
-{
-    color: rgb(202, 60, 60);
-}
-
 .contentOnlyButton:focus
 {
     outline: none;
+}
+
+.button-error
+{
+    color: rgb(202, 60, 60);
 }
 
 .button-error:active
 {
     background-color: rgb(202, 60, 60);
     color: white;
+}
+
+.tempLabel
+{
+    padding-left: 5px;
+}
+
+[draggable=true] {
+    -khtml-user-drag: element;
+
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.dragging
+{
+    cursor: grabbing !important;
+    cursor: -moz-grabbing !important;
+    cursor: -webkit-grabbing !important;
+
+    opacity: 1 !important;
+}
+
+.sortable-ghost
+{
+    background-color: var(--todoops-dark-blue);
+
+    height: 5px;
+    border-radius: 3px;
+}
+
+.sortable-ghost *
+{
+    visibility: hidden;
 }

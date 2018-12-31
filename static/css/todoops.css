@@ -70,6 +70,38 @@ body
     display: block;
 
     width: 100%;
+}
 
-    padding-left: 30px;
+.todoopItemForm .buttonGroupInputGrid
+{
+    margin-left: 30px;
+}
+
+.newItemInput
+{
+    padding-left: 30px !important;
+}
+
+.buttonGroupInputGrid
+{
+    display: grid;
+
+    grid-template-columns: max-content 1fr;
+    align-items: center;
+}
+
+.categoryWrapper
+{
+    box-sizing: border-box;
+    border: solid 2px transparent !important;
+}
+
+#newTodoopView.dragging .categoryWrapper
+{
+    border-color: blue;
+}
+
+.itemsFormDraggable
+{
+    min-height: 1px;
 }

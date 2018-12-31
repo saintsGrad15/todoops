@@ -1,8 +1,22 @@
+import {getNewJQElement} from "/static/js/util.js";
+
 export default {
     name: "todoop-category",
 
     config: {
         template: $("#todoopCategory").html(),
+
+        data()
+        {
+            return {
+                dragging: false,
+                itemDraggableOptions: {
+                    group: "items",
+                    animation: 150
+                },
+                itemsClone: this.items
+            }
+        },
 
         props: ["name", "items"],
         methods: {
@@ -27,7 +41,7 @@ export default {
 
                 if (newName.length < 1)
                 {
-                    this.items.splice(index, 1);
+                    this.deleteItem(index);
                 }
                 else
                 {
@@ -38,8 +52,18 @@ export default {
 
                 if (index === this.items.length)
                 {
-                    $(input).siblings().slice(-1).focus();
+                    $(input)
+                        .parent()
+                        .siblings().slice(-1)
+                        .find("input")
+                        .focus();
                 }
+            },
+
+            deleteItem(index)
+            {
+                // TODO Add deletion to undo crawl
+                this.items.splice(index, 1);
             },
 
             addNewItem(newItemInput)
@@ -52,11 +76,22 @@ export default {
 
                 this.$root.$nextTick(() => {
                     const jQNewItemInput = $(newItemInput);
-                    const jQNewlyCreatedItemInput = jQNewItemInput.siblings().slice(-1);
+                    const jQNewlyCreatedItemInput = jQNewItemInput
+                        .parent()
+                        .siblings().slice(-1)
+                        .children().slice(-1)
+                        .focus();
 
                     jQNewlyCreatedItemInput.focus();
                     jQNewItemInput.val("");
                 });
+            },
+        },
+
+        watch: {
+            itemsClone()
+            {
+                this.$emit("update:items", this.itemsClone);
             }
         }
     }
